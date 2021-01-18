@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
         tableName = "characters"
 )
 data class Character (
-
     @PrimaryKey(autoGenerate = false)
     val id: Int,
     val name: String,
-    val img_path: String
+    val img_path: String,
+    val in_pool: Boolean
     )

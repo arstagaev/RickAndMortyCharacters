@@ -1,4 +1,4 @@
-package com.revolve44.rickandmortycharacters.models
+package com.revolve44.rickandmortycharacters.models.fiftyelementsrequest
 
 
 import com.google.gson.annotations.SerializedName

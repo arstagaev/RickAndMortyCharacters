@@ -1,10 +1,9 @@
-package com.revolve44.rickandmortycharacters.models.forrequests
+package com.revolve44.rickandmortycharacters.models.fiftyelementsrequest
 
 
 import com.google.gson.annotations.SerializedName
-import com.revolve44.rickandmortycharacters.models.Location
 
-data class OneCharacter(
+data class RickAndMortyResponseItem(
     @SerializedName("id")
     val id: Int,
     @SerializedName("name")

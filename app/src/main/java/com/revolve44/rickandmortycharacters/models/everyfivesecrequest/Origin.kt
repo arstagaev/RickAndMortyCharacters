@@ -1,4 +1,4 @@
-package com.revolve44.rickandmortycharacters.models.forrequests
+package com.revolve44.rickandmortycharacters.models.everyfivesecrequest
 
 
 import com.google.gson.annotations.SerializedName

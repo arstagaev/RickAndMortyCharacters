@@ -3,36 +3,40 @@ package com.revolve44.rickandmortycharacters.storage
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.revolve44.rickandmortycharacters.models.Character
-import com.revolve44.rickandmortycharacters.models.DeletedCharacter
 
 
 @Dao
 interface CharacterDao {
-
+    ///// pool of deleting characters /////////////////////////////////
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addPassword(character: Character)
+    suspend fun addDeletedCharacterToPool(character: Character)
 
     @Query("SELECT * FROM characters")
-    fun getAllPasswords(): LiveData<List<Character>>
+    fun getAllCharactersFromPool(): LiveData<List<Character>>
 
     @Query("DELETE FROM characters")
-    suspend fun deleteAllPasswords()
+    suspend fun deleteAllCharactersFromPool()
 
     @Delete
-    suspend fun deleteOnePassword(character: Character)
+    suspend fun deleteCharacterFromPool(character: Character)
 
-    ///// trashbox /////////////////////////////////
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addDeletedPasswordtoTrashbox(deletedCharacter: DeletedCharacter)
 
-    @Query("SELECT * FROM deleted_characters")
-    fun getAllPasswordsFromTrashbox(): LiveData<List<DeletedCharacter>>
 
-    @Query("DELETE FROM deleted_characters")
-    suspend fun deleteAllPasswordsInTrashbox()
+    // no use now
+    //foundation for creating offline mode
+//    @Insert(onConflict = OnConflictStrategy.REPLACE)
+//    suspend fun addCharacter(character: Character)
+//
+//    @Query("SELECT * FROM characters")
+//    fun getAllCharacters(): LiveData<List<Character>>
+//
+//    @Query("DELETE FROM characters")
+//    suspend fun deleteAllCharacters()
+//
+//    @Delete
+//    suspend fun deleteOneCharacter(character: Character)
 
-    @Delete
-    suspend fun restoreOnePasswordFromTrashbox(deletedCharacter: DeletedCharacter)
+
 
 
 }

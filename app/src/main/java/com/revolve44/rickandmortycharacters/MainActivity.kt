@@ -17,10 +17,6 @@ import com.revolve44.rickandmortycharacters.viewmodels.MainScreenViewModel
 import com.revolve44.rickandmortycharacters.viewmodels.ViewModelProviderFactory
 import timber.log.Timber
 
-/**
- * get 15 elements
- * after that load one elements
- */
 
 class MainActivity : AppCompatActivity() {
 

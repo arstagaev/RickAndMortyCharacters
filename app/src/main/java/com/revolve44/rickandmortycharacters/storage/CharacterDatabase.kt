@@ -5,12 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.revolve44.rickandmortycharacters.models.Character
-import com.revolve44.rickandmortycharacters.models.DeletedCharacter
 
 
 @Database(
-    entities = [Character::class,
-               DeletedCharacter::class],
+    entities = [Character::class],
     version = 1
 )
 abstract class CharacterDatabase : RoomDatabase(){

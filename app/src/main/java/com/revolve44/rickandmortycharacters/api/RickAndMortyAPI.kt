@@ -1,7 +1,7 @@
 package com.revolve44.rickandmortycharacters.api
 
-import com.revolve44.rickandmortycharacters.models.RickAndMortyResponse
-import com.revolve44.rickandmortycharacters.models.forrequests.OneCharacter
+import com.revolve44.rickandmortycharacters.models.fiftyelementsrequest.RickAndMortyResponse
+import com.revolve44.rickandmortycharacters.models.everyfivesecrequest.OneCharacter
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

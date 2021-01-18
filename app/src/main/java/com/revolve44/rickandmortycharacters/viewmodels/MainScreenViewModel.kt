@@ -12,11 +12,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.revolve44.rickandmortycharacters.RickAndMortyApp
 import com.revolve44.rickandmortycharacters.models.Character
-import com.revolve44.rickandmortycharacters.models.RickAndMortyResponse
-import com.revolve44.rickandmortycharacters.models.forrequests.OneCharacter
+import com.revolve44.rickandmortycharacters.models.fiftyelementsrequest.RickAndMortyResponse
+import com.revolve44.rickandmortycharacters.models.everyfivesecrequest.OneCharacter
 import com.revolve44.rickandmortycharacters.repository.RickAndMortyRepository
 import com.revolve44.rickandmortycharacters.utils.Constants.Companion.SESSION_INTERVAL
 import com.revolve44.rickandmortycharacters.utils.Resource
+import com.revolve44.rickandmortycharacters.utils.getUpdatedList
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import timber.log.Timber
@@ -27,9 +28,8 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
     var requestFor1charc : MutableLiveData<Resource<OneCharacter>> = MutableLiveData()
     var charactersListMain = MutableLiveData<MutableList<Character>>()
 
-
+    // need for preparing elements to showing
     var listOfCharacters : MutableList<Character> = mutableListOf()
-
 
     var newIdOfCharacter = 16
 
@@ -37,11 +37,6 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
 
     init {
         startFirst15CharactersRequest()
-
-        // coz we now already have 15 characters
-
-
-
     }
 
     private fun every5secAddCharacter(){
@@ -50,15 +45,16 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
             override fun onTick(millisUntilFinished: Long) {
                 //Toast.makeText(app.applicationContext,"Tick",Toast.LENGTH_SHORT).show()
 
+                // I commented below call, because server is blocking frequent requests. i fuckup here
                 //startRequestEvery5secOneCharacter(idOfCharacter)
-                listOfCharacters.add(Character(
-                    newIdOfCharacter,
-                    listOfCharacters.get((0..14).random()).name,
-                    listOfCharacters.get((0..14).random()).img_path))
+                if (listOfCharacters.isNotEmpty()){
 
-                charactersListMain.value = listOfCharacters
+                    charactersListMain.value = getUpdatedList(listOfCharacters, newIdOfCharacter)
+                    newIdOfCharacter++
 
-                newIdOfCharacter++
+                }
+
+
 
             }
 
@@ -87,7 +83,7 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
         try {
             if (hasInternetConnection()){
 
-                Timber.i("vvv start 5sec reqest")
+                Timber.i("vvv start 5sec request")
                 val response = repo.getCharacter(idOfCharacter)
                 requestFor1charc.postValue(handleEvery5secOneCharacterRequest(response, idOfCharacter))
 
@@ -145,12 +141,12 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
                     //Timber.i("vvv1 " + resultResponse.toString() + "size ${CharactersListMain.value?.size}")
                     for (i in 0..resultResponse.size-1){
 
-                        listOfCharacters.add(Character(resultResponse.get(i).id,resultResponse.get(i).name,resultResponse.get(i).image))
+                        listOfCharacters.add(Character(resultResponse.get(i).id,resultResponse.get(i).name,resultResponse.get(i).image,false))
                     }
                     charactersListMain.value = listOfCharacters
                     every5secAddCharacter()
 
-                    //Timber.i("vvv2 " + CharactersListMain.value.toString() + "size ${CharactersListMain.value?.size}")
+
 
                 }catch (t: Throwable){
                     Timber.e("xxx handleRequest error ${t.message}")
@@ -159,7 +155,6 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
                 return Resource.Success(resultResponse)
             }
         }
-
         Timber.e("xxx not successful ${response.message()}")
         return Resource.Error(response.message())
     }
@@ -171,7 +166,7 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
                 try {
 
                     //var listOfCharacters: MutableList<Character> = mutableListOf()
-                    listOfCharacters.add(Character(resultResponse.id,resultResponse.name,resultResponse.image))
+                    listOfCharacters.add(Character(resultResponse.id,resultResponse.name,resultResponse.image,false))
                     charactersListMain.value = listOfCharacters
                     //setOneCharacterInList(Character(resultResponse.get(0).id,resultResponse.get(0).name,resultResponse.get(0).image))
 
@@ -198,6 +193,19 @@ class MainScreenViewModel(app: Application, val repo: RickAndMortyRepository): A
         return charactersListMain
     }
 
+    suspend fun deleteCharacter(character: Character) = viewModelScope.launch{
+        repo.addDeletedCharactertoPool(character)
+
+    }
+
+    //var getAllPool1 : LiveData<List<Character>> = repo.getAllCharactersFromPool()
+
+    fun getAllPool() : LiveData<List<Character>> {
+        //for (i in 0..a.value.size)
+
+
+        return repo.getAllCharactersFromPool()
+    }
 
 
     //check Internet connection
