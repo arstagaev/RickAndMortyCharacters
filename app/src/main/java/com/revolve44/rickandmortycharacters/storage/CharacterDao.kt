@@ -7,7 +7,9 @@ import com.revolve44.rickandmortycharacters.models.Character
 
 @Dao
 interface CharacterDao {
-    ///// pool of deleting characters /////////////////////////////////
+    ///// pool of deleting characters in db /////////////////////////////////
+    // but i made a decision create pool in the viewmodel
+    // because in my plan show this app to devs of server API, so that they include this app in his list https://rickandmortyapi.com/documentation/#libraries
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addDeletedCharacterToPool(character: Character)
 
