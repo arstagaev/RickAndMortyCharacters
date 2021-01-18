@@ -36,16 +36,5 @@ class MainActivity : AppCompatActivity() {
         val viewModelProviderFactory = ViewModelProviderFactory(application, repository)
         mainScreenViewModel = ViewModelProvider(this, viewModelProviderFactory).get(MainScreenViewModel::class.java)
 
-
-        init()
-
-        Toast.makeText(applicationContext,""+mainScreenViewModel.requestName.value,Toast.LENGTH_LONG).show()
-        Timber.i("xxxx "+mainScreenViewModel.requestName.value)
     }
-
-    private fun init(){
-
-    }
-
-
 }
